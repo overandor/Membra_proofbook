@@ -1,58 +1,91 @@
 # Membra ProofBook
 
-Membra ProofBook is the verification ledger for the MEMBRA ecosystem.
+**Membra ProofBook is the verification ledger namespace for MEMBRA Labs and the MEMBRA Proof Network.**
 
-It records canonical proof events, hashes, audit trails, QR/NFC interactions, campaign proof, reward eligibility, and optional Devnet anchors.
+It records canonical proof events, hashes, audit trails, QR/NFC interactions, campaign proof, reward eligibility, payout status, and optional Devnet anchors.
 
-## One-line thesis
+## Company Context
+
+- Company: **MEMBRA Labs**
+- Flagship product: **MEMBRA Proof Network**
+- Module: **Membra ProofBook**
+- Category: proof ledger, audit trail, canonical event hashing, verified reports
+
+## One-Line Thesis
 
 If MEMBRA claims a campaign placement, scan, proof event, media kit, or reward state happened, ProofBook makes that claim reproducible and auditable.
 
-## Role in the ecosystem
+## Product Role
 
-- `Membra_api` creates operational records.
-- `Membra_ads` creates campaign and media-kit events.
-- `Membra_mobile` submits proof media metadata.
-- `membra-qr-gateway` displays proof timelines.
-- `Membra_wallet` records funding and reward-state events.
-- `Membra_contracts` can anchor proof hashes in Devnet-first mode.
+ProofBook is the evidence layer behind MEMBRA Proof Network.
 
-## ProofBook event types
+It should store or reference:
 
-- owner_created
-- advertiser_created
-- asset_registered
-- asset_verified
-- campaign_created
-- creative_approved
-- campaign_funded
-- media_kit_created
-- qr_scan
-- nfc_tap
-- proof_submitted
-- proof_reviewed
-- reward_eligible
-- reward_released
-- vendor_order_created
-- kit_delivered
+- proof-event metadata
+- canonical JSON payloads
+- SHA-256 hashes
+- source system identifiers
+- timestamps
+- review status
+- scan/tap records
+- reward eligibility records
+- payout/release records
+- optional Devnet anchor IDs
 
-## Canonical proof process
+## ProofBook Event Types
+
+- `owner_created`
+- `advertiser_created`
+- `asset_registered`
+- `asset_verified`
+- `campaign_created`
+- `creative_approved`
+- `campaign_funded`
+- `media_kit_created`
+- `qr_scan`
+- `nfc_tap`
+- `proof_submitted`
+- `proof_reviewed`
+- `reward_eligible`
+- `reward_released`
+- `vendor_order_created`
+- `kit_delivered`
+
+## Canonical Proof Process
 
 1. Receive source event.
 2. Normalize payload into canonical JSON.
 3. Compute SHA-256 hash.
 4. Store payload, hash, source, and status.
 5. Optionally anchor hash through Devnet utilities.
-6. Return proof id and proof hash.
+6. Return proof ID and proof hash.
+
+## Integration Points
+
+| Repo | ProofBook Relationship |
+|---|---|
+| `overandor/Membra_ads` | campaign, media-kit, scan, proof, and audit events |
+| `overandor/Membra_wallet` | funding, reward eligibility, payout release hashes |
+| `overandor/Membra_admin-` | proof review and manual override audit trail |
+| `overandor/Membra_contracts` | optional Devnet proof-anchor utilities |
+| `overandor/membra-qr-gateway` | public/private proof timeline display |
+| `overandor/Membra_kpi` | verified report source and audit exports |
+| `overandor/Membra_mobile` | owner-submitted proof metadata |
 
 ## Rules
 
-- ProofBook stores evidence metadata, not sensitive raw identity data.
-- Hashes must be reproducible from canonical JSON.
-- Every proof event should have a source system.
-- Failed events should remain recorded with failure status.
-- Devnet anchoring is optional and must not replace the database.
+- store evidence metadata, not sensitive raw identity data
+- hashes must be reproducible from canonical JSON
+- every proof event should have a source system
+- failed events should remain recorded with failure status
+- Devnet anchoring is optional and must not replace the database
+- no raw KYC documents in public proof views
+- no payout eligibility without proof status traceability
 
-## Current stage
+## Productization Priority
 
-Verification module scaffold with standalone FastAPI starter.
+ProofBook should become the shared audit layer once the Membra Ads workflow and QR Gateway demo are connected.
+
+## Current Stage
+
+Verification module scaffold and proof-ledger charter. Suitable for company packaging; not yet a complete production ledger.
